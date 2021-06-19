@@ -8,7 +8,24 @@ const TRACK_H = 40;
 const TRACK_GAP = 2;
 const TRACK_COLS = 20;
 const TRACK_ROWS = 15;
-let trackGrid = new Array(TRACK_COLS * TRACK_ROWS) as [boolean];
+
+// prettier-ignore
+let trackGrid = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ];
+
 let tracksLeft = 0;
 
 let canvas, canvasContext;
@@ -30,14 +47,6 @@ const updateMousePos = (evt: MouseEvent) => {
   // ballSpeedY = -4;
 };
 
-const trackReset = () => {
-  tracksLeft = 0;
-  for (let i = 0; i < TRACK_COLS * TRACK_ROWS; i++) {
-    trackGrid[i] = true;
-    tracksLeft++;
-  } // end of for each track
-}; // end of track Reset func
-
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
   canvasContext = canvas.getContext('2d');
@@ -47,7 +56,6 @@ window.onload = () => {
 
   canvas.addEventListener('mousemove', updateMousePos);
 
-  trackReset();
   ballReset();
 };
 
@@ -81,14 +89,13 @@ const ballMove = () => {
   if (ballY > canvas.height) {
     // Bottom
     ballReset();
-    trackReset();
   }
 };
 
 const isTrackAtColRow = (col: number, row: number) => {
   if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
     let trackIndexUnderCoord = rowColToArrayIndex(col, row);
-    return trackGrid[trackIndexUnderCoord];
+    return trackGrid[trackIndexUnderCoord] === 1;
   } else {
     return false;
   }
@@ -101,10 +108,6 @@ const ballTrackHandling = () => {
 
   if (ballTrackCol >= 0 && ballTrackCol < TRACK_COLS && ballTrackRow >= 0 && ballTrackRow < TRACK_ROWS) {
     if (isTrackAtColRow(ballTrackCol, ballTrackRow)) {
-      trackGrid[trackIndexUnderBall] = false;
-      tracksLeft--;
-      // console.log('tracksLeft: ', tracksLeft);
-
       let prevBallX = ballX - ballSpeedX;
       let prevBallY = ballY - ballSpeedY;
       let prevTrackCol = Math.floor(prevBallX / TRACK_W);
@@ -134,7 +137,6 @@ const ballTrackHandling = () => {
   } // end of valid col and row
 }; // end of ballTrackHandling function
 
-
 const moveAll = () => {
   ballMove();
 
@@ -150,7 +152,7 @@ const drawTracks = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex]) {
+      if (trackGrid[arrayIndex] === 1) {
         colorRect(TRACK_W * eachCol, TRACK_H * eachRow, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
       } // end of if this track here
     } // end of for each track

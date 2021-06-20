@@ -1,3 +1,6 @@
+let carPic = document.createElement('img');
+let carPicLoaded = false; // image loaded asynchronously
+
 let ballX = 75;
 let ballY = 75;
 let ballSpeedX = 5;
@@ -28,7 +31,11 @@ let trackGrid = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 
 let tracksLeft = 0;
 
-let canvas, canvasContext;
+type Canvas = HTMLCanvasElement | null;
+type CanvasContext = CanvasRenderingContext2D | null;
+
+let canvas: Canvas = null;
+let canvasContext: CanvasContext = null;
 
 let mouseX = 0;
 let mouseY = 0;
@@ -56,11 +63,16 @@ window.onload = () => {
 
   canvas.addEventListener('mousemove', updateMousePos);
 
+  carPic.onload = () => {
+    carPicLoaded = true;
+  };
+  carPic.src = 'player1car.png';
+
   ballReset();
 };
 
 const updateAll = () => {
-  // moveAll();
+  moveAll();
   drawAll();
 };
 
@@ -171,6 +183,10 @@ const drawTracks = () => {
 const drawAll = () => {
   colorRect(0, 0, canvas.width, canvas.height, 'black'); // clear screen
   colorCircle(ballX, ballY, 10, 'white'); // draw ball
+
+  if (carPicLoaded) {
+    canvasContext.drawImage(carPic, ballX - carPic.width / 2, ballY - carPic.height / 2);
+  }
 
   drawTracks();
 };

@@ -100,24 +100,6 @@ const carMove = () => {
   carY += Math.sin(carAng) * carSpeed;
 
   carAng += 0.02;
-
-  if (carX < 0 && carSpeedX < 0.0) {
-    // Left
-    carSpeedX *= -1;
-  }
-  if (carX > canvas.width && carSpeedX > 0.0) {
-    // Right
-    carSpeedX *= -1;
-  }
-
-  if (carY < 0 && carSpeedY < 0.0) {
-    // Top
-    carSpeedY *= -1;
-  }
-  if (carY > canvas.height) {
-    // Bottom
-    carReset();
-  }
 };
 
 const isTrackAtColRow = (col: number, row: number) => {
@@ -136,31 +118,7 @@ const carTrackHandling = () => {
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
     if (isTrackAtColRow(carTrackCol, carTrackRow)) {
-      let prevCarX = carX - carSpeedX;
-      let prevCarY = carY - carSpeedY;
-      let prevTrackCol = Math.floor(prevCarX / TRACK_W);
-      let prevTrackRow = Math.floor(prevCarY / TRACK_H);
-
-      let bothTestsFailed = true;
-
-      if (prevTrackCol != carTrackCol) {
-        if (isTrackAtColRow(prevTrackCol, carTrackRow) == false) {
-          carSpeedX *= -1;
-          bothTestsFailed = false;
-        }
-      }
-      if (prevTrackRow != carTrackRow) {
-        if (isTrackAtColRow(carTrackCol, prevTrackRow) == false) {
-          carSpeedY *= -1;
-          bothTestsFailed = false;
-        }
-      }
-
-      if (bothTestsFailed) {
-        // armpit case, prevents car from going through
-        carSpeedX *= -1;
-        carSpeedY *= -1;
-      }
+      carSpeed *= -1;
     } // end of track found
   } // end of valid col and row
 }; // end of carTrackHandling function
@@ -189,10 +147,10 @@ const drawTracks = () => {
 
 const drawAll = () => {
   colorRect(0, 0, canvas.width, canvas.height, 'black'); // clear screen
-  // colorCircle(carX, cariY, 10, 'white'); // draw car
+  // colorCircle(carX, carY, 10, 'white'); // draw car
 
   if (carPicLoaded) {
-    drawBitmapCenteredWithRotation(carPic, carX, carY, withAng);
+    drawBitmapCenteredWithRotation(carPic, carX, carY, carAng);
   }
 
   drawTracks();

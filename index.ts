@@ -140,18 +140,20 @@ const carReset = () => {
 };
 
 const carMove = () => {
-  const SPEED_RANGE = 0.02;
+  carSpeed *= 0.97;
+
+  const SPEED_RANGE = 0.3;
   if (keyHeld_Gas) {
-    carSpeed += 0.02;
+    carSpeed += SPEED_RANGE;
   }
   if (keyHeld_Reverse) {
     carSpeed = carSpeed - SPEED_RANGE <= 0 ? 0 : carSpeed - SPEED_RANGE;
   }
   if (keyHeld_TurnLeft) {
-    carAng += 0.02;
+    carAng += 0.04;
   }
   if (keyHeld_TurnRight) {
-    carAng -= 0.02;
+    carAng -= 0.04;
   }
 
   carX += Math.cos(carAng) * carSpeed;

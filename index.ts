@@ -3,8 +3,10 @@ let carPicLoaded = false; // image loaded asynchronously
 
 let carX = 75;
 let carY = 75;
-let carSpeedX = 5;
-let carSpeedY = 7;
+// let carSpeedX = 5;
+// let carSpeedY = 7;
+let carSpeed = 2;
+let carAng = 0;
 
 const TRACK_W = 40;
 const TRACK_H = 40;
@@ -91,8 +93,13 @@ const carReset = () => {
 };
 
 const carMove = () => {
-  carX += carSpeedX;
-  carY += carSpeedY;
+  // carX += carSpeedX;
+  // carY += carSpeedY;
+
+  carX += Math.cos(carAng) * carSpeed;
+  carY += Math.sin(carAng) * carSpeed;
+
+  carAng += 0.02;
 
   if (carX < 0 && carSpeedX < 0.0) {
     // Left
@@ -182,13 +189,21 @@ const drawTracks = () => {
 
 const drawAll = () => {
   colorRect(0, 0, canvas.width, canvas.height, 'black'); // clear screen
-  colorCircle(carX, carY, 10, 'white'); // draw car
+  // colorCircle(carX, cariY, 10, 'white'); // draw car
 
   if (carPicLoaded) {
-    canvasContext.drawImage(carPic, carX - carPic.width / 2, carY - carPic.height / 2);
+    drawBitmapCenteredWithRotation(carPic, carX, carY, withAng);
   }
 
   drawTracks();
+};
+
+const drawBitmapCenteredWithRotation = (useBitmap, atX, atY, withAng) => {
+  canvasContext.save();
+  canvasContext.translate(atX, atY);
+  canvasContext.rotate(withAng);
+  canvasContext.drawImage(useBitmap, -useBitmap.width / 2, -useBitmap.height / 2);
+  canvasContext.restore();
 };
 
 const colorText = (showWords: string, textX: number, textY: number, fillColor: string) => {

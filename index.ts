@@ -132,6 +132,7 @@ const carReset = () => {
 
       if (trackGrid[arrayIndex] === 2) {
         trackGrid[arrayIndex] = 0;
+        carAng = (-90 * Math.PI) / 180.0;
         carX = eachCol * TRACK_W + TRACK_W / 2;
         carY = eachRow * TRACK_H + TRACK_H / 2;
       } // end of if this track here

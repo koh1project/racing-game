@@ -5,7 +5,7 @@ let carX = 75;
 let carY = 75;
 // let carSpeedX = 5;
 // let carSpeedY = 7;
-let carSpeed = 2;
+let carSpeed = 0;
 let carAng = 0;
 
 const TRACK_W = 40;
@@ -39,12 +39,15 @@ type CanvasContext = CanvasRenderingContext2D | null;
 let canvas: Canvas = null;
 let canvasContext: CanvasContext = null;
 
-const KEY_EVENTS = {
-  KEY_LEFT_ARROW: 37,
-  KEY_UP_ARROW: 38,
-  KEY_RIGHT_ARROW: 39,
-  KEY_DOWN_ARROW: 40,
-};
+const KEY_LEFT_ARROW = 37;
+const KEY_UP_ARROW = 38;
+const KEY_RIGHT_ARROW = 39;
+const KEY_DOWN_ARROW = 40;
+
+let keyHeld_Gas = false;
+let keyHeld_Reverse = false;
+let keyHeld_TurnLeft = false;
+let keyHeld_TurnRight = false;
 
 let mouseX = 0;
 let mouseY = 0;
@@ -59,17 +62,17 @@ const updateMousePos = (evt: MouseEvent) => {
 
 const keyPressed = (evt: KeyboardEvent) => {
   switch (evt.keyCode) {
-    case KEY_EVENTS.KEY_LEFT_ARROW:
-      carAng -= -0.5;
+    case KEY_LEFT_ARROW:
+      keyHeld_TurnLeft = true;
       break;
-    case KEY_EVENTS.KEY_RIGHT_ARROW:
-      carAng += -0.5;
+    case KEY_RIGHT_ARROW:
+      keyHeld_TurnRight = true;
       break;
-    case KEY_EVENTS.KEY_UP_ARROW:
-      carSpeed += -0.5;
+    case KEY_UP_ARROW:
+      keyHeld_Gas = true;
       break;
-    case KEY_EVENTS.KEY_DOWN_ARROW:
-      carSpeed -= 0.5;
+    case KEY_DOWN_ARROW:
+      keyHeld_Reverse = true;
       break;
     default:
       break;
@@ -78,7 +81,24 @@ const keyPressed = (evt: KeyboardEvent) => {
   evt.preventDefault();
 };
 
-const keyReleased = (evt: KeyboardEvent) => {};
+const keyReleased = (evt: KeyboardEvent) => {
+  switch (evt.keyCode) {
+    case KEY_LEFT_ARROW:
+      keyHeld_TurnLeft = false;
+      break;
+    case KEY_RIGHT_ARROW:
+      keyHeld_TurnRight = false;
+      break;
+    case KEY_UP_ARROW:
+      keyHeld_Gas = false;
+      break;
+    case KEY_DOWN_ARROW:
+      keyHeld_Reverse = false;
+      break;
+    default:
+      break;
+  }
+};
 
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -120,6 +140,20 @@ const carReset = () => {
 };
 
 const carMove = () => {
+  const SPEED_RANGE = 0.02;
+  if (keyHeld_Gas) {
+    carSpeed += 0.02;
+  }
+  if (keyHeld_Reverse) {
+    carSpeed = carSpeed - SPEED_RANGE <= 0 ? 0 : carSpeed - SPEED_RANGE;
+  }
+  if (keyHeld_TurnLeft) {
+    carAng += 0.02;
+  }
+  if (keyHeld_TurnRight) {
+    carAng -= 0.02;
+  }
+
   carX += Math.cos(carAng) * carSpeed;
   carY += Math.sin(carAng) * carSpeed;
 };
@@ -140,7 +174,10 @@ const carTrackHandling = () => {
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
     if (isTrackAtColRow(carTrackCol, carTrackRow)) {
-      carSpeed *= -1;
+      carX -= Math.cos(carAng) * carSpeed;
+      carY -= Math.sin(carAng) * carSpeed;
+
+      carSpeed *= -0.5;
     } // end of track found
   } // end of valid col and row
 }; // end of carTrackHandling function

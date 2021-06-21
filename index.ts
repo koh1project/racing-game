@@ -39,6 +39,13 @@ type CanvasContext = CanvasRenderingContext2D | null;
 let canvas: Canvas = null;
 let canvasContext: CanvasContext = null;
 
+const KEY_EVENTS = {
+  KEY_LEFT_ARROW: 37,
+  KEY_UP_ARROW: 38,
+  KEY_RIGHT_ARROW: 39,
+  KEY_DOWN_ARROW: 40,
+};
+
 let mouseX = 0;
 let mouseY = 0;
 
@@ -48,21 +55,30 @@ const updateMousePos = (evt: MouseEvent) => {
 
   mouseX = evt.clientX - rect.left - root.scrollLeft;
   mouseY = evt.clientY - rect.top - root.scrollTop;
-
-  // cheat / hack to test car in any position
-  // carX = mouseX;
-  // carY = mouseY;
-  // carSpeedX = 4;
-  // carSpeedY = -4;
 };
 
 const keyPressed = (evt: KeyboardEvent) => {
-  console.log(`KeyPressed: ${evt.keyCode}`);
+  switch (evt.keyCode) {
+    case KEY_EVENTS.KEY_LEFT_ARROW:
+      carAng -= -0.5;
+      break;
+    case KEY_EVENTS.KEY_RIGHT_ARROW:
+      carAng += -0.5;
+      break;
+    case KEY_EVENTS.KEY_UP_ARROW:
+      carSpeed += -0.5;
+      break;
+    case KEY_EVENTS.KEY_DOWN_ARROW:
+      carSpeed -= 0.5;
+      break;
+    default:
+      break;
+  }
+
+  evt.preventDefault();
 };
 
-const keyReleased = (evt: KeyboardEvent) => {
-  console.log(`keyReleased: ${evt.keyCode}`);
-};
+const keyReleased = (evt: KeyboardEvent) => {};
 
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -104,13 +120,8 @@ const carReset = () => {
 };
 
 const carMove = () => {
-  // carX += carSpeedX;
-  // carY += carSpeedY;
-
   carX += Math.cos(carAng) * carSpeed;
   carY += Math.sin(carAng) * carSpeed;
-
-  carAng += 0.02;
 };
 
 const isTrackAtColRow = (col: number, row: number) => {

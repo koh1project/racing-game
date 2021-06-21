@@ -56,6 +56,14 @@ const updateMousePos = (evt: MouseEvent) => {
   // carSpeedY = -4;
 };
 
+const keyPressed = (evt: KeyboardEvent) => {
+  console.log(`KeyPressed: ${evt.keyCode}`);
+};
+
+const keyReleased = (evt: KeyboardEvent) => {
+  console.log(`keyReleased: ${evt.keyCode}`);
+};
+
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
   canvasContext = canvas.getContext('2d');
@@ -64,6 +72,9 @@ window.onload = () => {
   setInterval(updateAll, 1000 / framesPerSecond);
 
   canvas.addEventListener('mousemove', updateMousePos);
+
+  document.addEventListener('keydown', keyPressed);
+  document.addEventListener('keyup', keyReleased);
 
   carPic.onload = () => {
     carPicLoaded = true;

@@ -3,10 +3,13 @@ let carPicLoaded = false; // image loaded asynchronously
 
 let carX = 75;
 let carY = 75;
-// let carSpeedX = 5;
-// let carSpeedY = 7;
-let carSpeed = 0;
 let carAng = 0;
+let carSpeed = 0;
+
+const GROUNDSPEED_DECAY_MULT = 0.94;
+const DRIVE_POWER = 0.5;
+const REVERSE_POWER = 0.2;
+const TURN_RATE = 0.3;
 
 const TRACK_W = 40;
 const TRACK_H = 40;
@@ -141,20 +144,20 @@ const carReset = () => {
 };
 
 const carMove = () => {
-  carSpeed *= 0.97;
+  carSpeed *= GROUNDSPEED_DECAY_MULT;
 
   const SPEED_RANGE = 0.3;
   if (keyHeld_Gas) {
-    carSpeed += SPEED_RANGE;
+    carSpeed += DRIVE_POWER;
   }
   if (keyHeld_Reverse) {
-    carSpeed = carSpeed - SPEED_RANGE <= 0 ? 0 : carSpeed - SPEED_RANGE;
+    carSpeed = carSpeed - REVERSE_POWER <= 0 ? 0 : carSpeed - REVERSE_POWER;
   }
   if (keyHeld_TurnLeft) {
-    carAng += 0.04;
+    carAng += TURN_RATE;
   }
   if (keyHeld_TurnRight) {
-    carAng -= 0.04;
+    carAng -= TURN_RATE;
   }
 
   carX += Math.cos(carAng) * carSpeed;

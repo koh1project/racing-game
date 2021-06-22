@@ -34,7 +34,9 @@ let trackGrid = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                   1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1,
                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ];
 
-let tracksLeft = 0;
+const TRACK_ROAD = 0;
+const TRACK_WALL = 1;
+const TRACK_PLAYERSTART = 2;
 
 type Canvas = HTMLCanvasElement | null;
 type CanvasContext = CanvasRenderingContext2D | null;
@@ -133,8 +135,8 @@ const carReset = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === 2) {
-        trackGrid[arrayIndex] = 0;
+      if (trackGrid[arrayIndex] === TRACK_PLAYERSTART) {
+        trackGrid[arrayIndex] = TRACK_ROAD;
         carAng = (-90 * Math.PI) / 180.0;
         carX = eachCol * TRACK_W + TRACK_W / 2;
         carY = eachRow * TRACK_H + TRACK_H / 2;
@@ -146,7 +148,6 @@ const carReset = () => {
 const carMove = () => {
   carSpeed *= GROUNDSPEED_DECAY_MULT;
 
-  const SPEED_RANGE = 0.3;
   if (keyHeld_Gas) {
     carSpeed += DRIVE_POWER;
   }
@@ -164,10 +165,10 @@ const carMove = () => {
   carY += Math.sin(carAng) * carSpeed;
 };
 
-const isTrackAtColRow = (col: number, row: number) => {
+const isWallaTcOlrOw = (col: number, row: number) => {
   if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
     let trackIndexUnderCoord = rowColToArrayIndex(col, row);
-    return trackGrid[trackIndexUnderCoord] === 1;
+    return trackGrid[trackIndexUnderCoord] === TRACK_WALL;
   } else {
     return false;
   }
@@ -179,7 +180,7 @@ const carTrackHandling = () => {
   let trackIndexUnderCar = rowColToArrayIndex(carTrackCol, carTrackRow);
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
-    if (isTrackAtColRow(carTrackCol, carTrackRow)) {
+    if (isWallaTcOlrOw(carTrackCol, carTrackRow)) {
       carX -= Math.cos(carAng) * carSpeed;
       carY -= Math.sin(carAng) * carSpeed;
 
@@ -203,7 +204,7 @@ const drawTracks = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === 1) {
+      if (trackGrid[arrayIndex] === TRACK_WALL) {
         colorRect(TRACK_W * eachCol, TRACK_H * eachRow, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
       } // end of if this track here
     } // end of for each track

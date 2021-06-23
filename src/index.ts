@@ -1,42 +1,15 @@
+import { TRACK_W, TRACK_H, TRACK_GAP, TRACK_COLS, TRACK_ROWS, trackGrid } from './Track';
+
 let carPic = document.createElement('img');
 let carPicLoaded = false; // image loaded asynchronously
 
 let carX = 75;
 let carY = 75;
-let carAng = 0;
+
 let carSpeed = 0;
+let carAng = 0;
 
-const GROUNDSPEED_DECAY_MULT = 0.94;
-const DRIVE_POWER = 0.5;
-const REVERSE_POWER = 0.2;
-const TURN_RATE = 0.3;
-
-const TRACK_W = 40;
-const TRACK_H = 40;
-const TRACK_GAP = 2;
-const TRACK_COLS = 20;
-const TRACK_ROWS = 15;
-
-// prettier-ignore
-let trackGrid = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-                  1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                  1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
-                  1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
-                  1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  1, 0, 2, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-                  1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-                  1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
-                  1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1,
-                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ];
-
-const TRACK_ROAD = 0;
-const TRACK_WALL = 1;
-const TRACK_PLAYERSTART = 2;
+let tracksLeft = 0;
 
 type Canvas = HTMLCanvasElement | null;
 type CanvasContext = CanvasRenderingContext2D | null;
@@ -120,7 +93,7 @@ window.onload = () => {
   carPic.onload = () => {
     carPicLoaded = true;
   };
-  carPic.src = 'player1car.png';
+  carPic.src = './images/player1car.png';
 
   carReset();
 };
@@ -135,8 +108,8 @@ const carReset = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === TRACK_PLAYERSTART) {
-        trackGrid[arrayIndex] = TRACK_ROAD;
+      if (trackGrid[arrayIndex] === 2) {
+        trackGrid[arrayIndex] = 0;
         carAng = (-90 * Math.PI) / 180.0;
         carX = eachCol * TRACK_W + TRACK_W / 2;
         carY = eachRow * TRACK_H + TRACK_H / 2;
@@ -146,29 +119,30 @@ const carReset = () => {
 };
 
 const carMove = () => {
-  carSpeed *= GROUNDSPEED_DECAY_MULT;
+  carSpeed *= 0.97;
 
+  const SPEED_RANGE = 0.3;
   if (keyHeld_Gas) {
-    carSpeed += DRIVE_POWER;
+    carSpeed += SPEED_RANGE;
   }
   if (keyHeld_Reverse) {
-    carSpeed = carSpeed - REVERSE_POWER <= 0 ? 0 : carSpeed - REVERSE_POWER;
+    carSpeed = carSpeed - SPEED_RANGE <= 0 ? 0 : carSpeed - SPEED_RANGE;
   }
   if (keyHeld_TurnLeft) {
-    carAng += TURN_RATE;
+    carAng += 0.04;
   }
   if (keyHeld_TurnRight) {
-    carAng -= TURN_RATE;
+    carAng -= 0.04;
   }
 
   carX += Math.cos(carAng) * carSpeed;
   carY += Math.sin(carAng) * carSpeed;
 };
 
-const isWallaTcOlrOw = (col: number, row: number) => {
+const isTrackAtColRow = (col: number, row: number) => {
   if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
     let trackIndexUnderCoord = rowColToArrayIndex(col, row);
-    return trackGrid[trackIndexUnderCoord] === TRACK_WALL;
+    return trackGrid[trackIndexUnderCoord] === 1;
   } else {
     return false;
   }
@@ -180,7 +154,7 @@ const carTrackHandling = () => {
   let trackIndexUnderCar = rowColToArrayIndex(carTrackCol, carTrackRow);
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
-    if (isWallaTcOlrOw(carTrackCol, carTrackRow)) {
+    if (isTrackAtColRow(carTrackCol, carTrackRow)) {
       carX -= Math.cos(carAng) * carSpeed;
       carY -= Math.sin(carAng) * carSpeed;
 
@@ -204,7 +178,7 @@ const drawTracks = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === TRACK_WALL) {
+      if (trackGrid[arrayIndex] === 1) {
         colorRect(TRACK_W * eachCol, TRACK_H * eachRow, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
       } // end of if this track here
     } // end of for each track

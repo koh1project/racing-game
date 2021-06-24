@@ -13,19 +13,13 @@ export const countLoadedImagesAndLaunchIfReady = () => {
   }
 };
 
-export const carImageLoad = () => {
-  carPic.onload = countLoadedImagesAndLaunchIfReady;
-  carPic.src = './images/player1car.png';
-};
-
-export const trackLoadImages = (): void => {
-  roadPic.onload = countLoadedImagesAndLaunchIfReady;
-  wallPic.onload = countLoadedImagesAndLaunchIfReady;
-  roadPic.src = './images/track_road.png';
-  wallPic.src = './images/track_wall.png';
+const beginLoadingImage = (imgVar: HTMLImageElement, fileName: string) => {
+  imgVar.onload = countLoadedImagesAndLaunchIfReady;
+  imgVar.src = `./images/${fileName}`;
 };
 
 export const loadImages = () => {
-  carImageLoad();
-  trackLoadImages();
+  beginLoadingImage(carPic, 'player1car.png');
+  beginLoadingImage(roadPic, 'track_road.png');
+  beginLoadingImage(wallPic, 'track_wall.png');
 };

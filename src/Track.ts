@@ -24,10 +24,14 @@ let trackGrid = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                   1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1,
                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ];
 
+export const TRACK_ROAD = 0;
+export const TRACK_WALL = 1;
+export const TRACK_PLAYERSTART = 2;
+
 export const isWallAtColRow = (col: number, row: number) => {
   if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
     let trackIndexUnderCoord = rowColToArrayIndex(col, row);
-    return trackGrid[trackIndexUnderCoord] === 1;
+    return trackGrid[trackIndexUnderCoord] === TRACK_WALL;
   } else {
     return false;
   }
@@ -39,11 +43,6 @@ export const carTrackHandling = () => {
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
     if (isWallAtColRow(carTrackCol, carTrackRow)) {
-      //       carX -= Math.cos(carAng) * carSpeed;
-      //       carY -= Math.sin(carAng) * carSpeed;
-
-      //       carSpeed *= -0.5;
-
       changeCarSpeed();
     } // end of track found
   } // end of valid col and row
@@ -58,7 +57,7 @@ export const drawTracks = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === 1) {
+      if (trackGrid[arrayIndex] === TRACK_WALL) {
         colorRect(TRACK_W * eachCol, TRACK_H * eachRow, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
       } // end of if this track here
     } // end of for each track

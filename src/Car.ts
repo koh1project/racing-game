@@ -1,6 +1,6 @@
 import { drawBitmapCenteredWithRotation } from './GraphicsCommon';
 import { keyHeld_Gas, keyHeld_Reverse, keyHeld_TurnLeft, keyHeld_TurnRight } from './Input';
-import { rowColToArrayIndex, trackGrid, TRACK_COLS, TRACK_H, TRACK_ROWS, TRACK_W } from './Track';
+import { rowColToArrayIndex, trackGrid, TRACK_COLS, TRACK_H, TRACK_ROWS, TRACK_W, TRACK_PLAYERSTART } from './Track';
 
 export let carPic = document.createElement('img');
 let carPicLoaded = false; // image loaded asynchronously
@@ -21,7 +21,7 @@ export const carReset = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === 2) {
+      if (trackGrid[arrayIndex] === TRACK_PLAYERSTART) {
         trackGrid[arrayIndex] = 0;
         carAng = (-90 * Math.PI) / 180.0;
         carX = eachCol * TRACK_W + TRACK_W / 2;

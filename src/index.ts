@@ -1,5 +1,4 @@
 import { carReset, carMove, carDraw } from './Car';
-import { colorRect } from './GraphicsCommon';
 import { setupInput } from './Input';
 import { carTrackHandling, drawTracks } from './Track';
 import { loadImages } from './ImageLoading';
@@ -14,11 +13,15 @@ window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
   canvasContext = canvas.getContext('2d');
 
+  loadImages();
+};
+
+export const imageLoadingDoneSoStartGame = () => {
   let framesPerSecond = 30;
   setInterval(updateAll, 1000 / framesPerSecond);
 
   setupInput();
-  loadImages();
+
   carReset();
 };
 

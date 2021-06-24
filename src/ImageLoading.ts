@@ -4,7 +4,7 @@ export let carPic = document.createElement('img');
 export const roadPic = document.createElement('img');
 export const wallPic = document.createElement('img');
 
-let picsToLoad = 0;
+let picsToLoad = 0; // set automatically based on imageList in loadImages
 
 export const countLoadedImagesAndLaunchIfReady = () => {
   picsToLoad--;
@@ -14,13 +14,22 @@ export const countLoadedImagesAndLaunchIfReady = () => {
 };
 
 const beginLoadingImage = (imgVar: HTMLImageElement, fileName: string) => {
-  picsToLoad++;
   imgVar.onload = countLoadedImagesAndLaunchIfReady;
   imgVar.src = `./images/${fileName}`;
 };
 
+type ImageListItem = { varName: HTMLImageElement; theFile: string };
+
 export const loadImages = () => {
-  beginLoadingImage(carPic, 'player1car.png');
-  beginLoadingImage(roadPic, 'track_road.png');
-  beginLoadingImage(wallPic, 'track_wall.png');
+  const imageList: ImageListItem[] = [
+    { varName: carPic, theFile: 'player1car.png' },
+    { varName: roadPic, theFile: 'track_road.png' },
+    { varName: wallPic, theFile: 'track_wall.png' },
+  ];
+
+  picsToLoad = imageList.length;
+
+  for (let i = 0, length = imageList.length; i < length; i++) {
+    beginLoadingImage(imageList[i].varName, imageList[i].theFile);
+  }
 };

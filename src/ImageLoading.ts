@@ -1,8 +1,11 @@
 import { imageLoadingDoneSoStartGame } from './index';
 
-export let carPic = document.createElement('img');
+export const carPic = document.createElement('img');
 export const roadPic = document.createElement('img');
 export const wallPic = document.createElement('img');
+export const goalPic = document.createElement('img');
+export const treePic = document.createElement('img');
+export const flagPic = document.createElement('img');
 
 let picsToLoad = 0; // set automatically based on imageList in loadImages
 
@@ -25,6 +28,9 @@ export const loadImages = () => {
     { varName: carPic, theFile: 'player1car.png' },
     { varName: roadPic, theFile: 'track_road.png' },
     { varName: wallPic, theFile: 'track_wall.png' },
+    { varName: goalPic, theFile: 'track_goal.png' },
+    { varName: treePic, theFile: 'track_tree.png' },
+    { varName: flagPic, theFile: 'track_flag.png' },
   ];
 
   picsToLoad = imageList.length;

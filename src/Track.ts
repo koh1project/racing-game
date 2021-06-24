@@ -1,7 +1,7 @@
 import { carX, carY, changeCarSpeed } from './Car';
 import { colorRect } from './GraphicsCommon';
 import { canvasContext } from './index';
-import { roadPic, wallPic, goalPic, treePic, flagPic } from './ImageLoading';
+import { trackPics } from './ImageLoading';
 
 export const TRACK_W = 40;
 export const TRACK_H = 40;
@@ -63,26 +63,7 @@ export const drawTracks = () => {
       const arrayIndex = rowColToArrayIndex(eachCol, eachRow);
       const tileKindHere = trackGrid[arrayIndex];
 
-      let useImg;
-      switch (tileKindHere) {
-        case TRACK_ROAD:
-          useImg = roadPic;
-          // canvasContext.drawImage(roadPic, TRACK_W * eachCol, TRACK_H * eachRow);
-          break;
-        case TRACK_WALL:
-          // canvasContext.drawImage(wallPic, TRACK_W * eachCol, TRACK_H * eachRow);
-          useImg = wallPic;
-          break;
-        case TRACK_GOAL:
-          useImg = goalPic;
-          break;
-        case TRACK_TREE:
-          useImg = treePic;
-          break;
-        case TRACK_FLAG:
-          useImg = flagPic;
-          break;
-      }
+      const useImg = trackPics[tileKindHere];
 
       canvasContext.drawImage(useImg, TRACK_W * eachCol, TRACK_H * eachRow);
     } // end of for each track

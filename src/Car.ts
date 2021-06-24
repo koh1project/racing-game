@@ -1,9 +1,7 @@
 import { drawBitmapCenteredWithRotation } from './GraphicsCommon';
 import { keyHeld_Gas, keyHeld_Reverse, keyHeld_TurnLeft, keyHeld_TurnRight } from './Input';
 import { rowColToArrayIndex, trackGrid, TRACK_COLS, TRACK_H, TRACK_ROWS, TRACK_W, TRACK_PLAYERSTART } from './Track';
-
-export let carPic = document.createElement('img');
-let carPicLoaded = false; // image loaded asynchronously
+import { carPicLoaded, carPic } from './ImageLoading';
 
 export let carX = 75;
 export let carY = 75;
@@ -50,13 +48,6 @@ export const carMove = () => {
 
   carX += Math.cos(carAng) * carSpeed;
   carY += Math.sin(carAng) * carSpeed;
-};
-
-export const carImageLoad = () => {
-  carPic.onload = function () {
-    carPicLoaded = true;
-  };
-  carPic.src = './images/player1car.png';
 };
 
 export const carDraw = () => {

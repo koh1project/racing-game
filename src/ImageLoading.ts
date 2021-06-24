@@ -4,7 +4,7 @@ export let carPic = document.createElement('img');
 export const roadPic = document.createElement('img');
 export const wallPic = document.createElement('img');
 
-let picsToLoad = 3;
+let picsToLoad = 0;
 
 export const countLoadedImagesAndLaunchIfReady = () => {
   picsToLoad--;
@@ -14,6 +14,7 @@ export const countLoadedImagesAndLaunchIfReady = () => {
 };
 
 const beginLoadingImage = (imgVar: HTMLImageElement, fileName: string) => {
+  picsToLoad++;
   imgVar.onload = countLoadedImagesAndLaunchIfReady;
   imgVar.src = `./images/${fileName}`;
 };

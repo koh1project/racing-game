@@ -1,6 +1,16 @@
 import { drawBitmapCenteredWithRotation } from './GraphicsCommon';
 import { keyHeld_Gas, keyHeld_Reverse, keyHeld_TurnLeft, keyHeld_TurnRight } from './Input';
-import { rowColToArrayIndex, trackGrid, TRACK_COLS, TRACK_H, TRACK_ROWS, TRACK_W, TRACK_PLAYERSTART } from './Track';
+import {
+  rowColToArrayIndex,
+  trackGrid,
+  TRACK_COLS,
+  TRACK_H,
+  TRACK_ROWS,
+  TRACK_W,
+  TRACK_PLAYERSTART,
+  carTrackHandling,
+  TRACK_ROAD,
+} from './Track';
 import { carPic } from './ImageLoading';
 
 const GROUNDSPEED_DECAY_MULT = 0.94;
@@ -29,18 +39,18 @@ export class Car {
   };
 
   carReset = () => {
-    for (let eachRow = 0; eachRow < TRACK_ROWS; eachRow++) {
-      for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
-        let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
-
-        if (trackGrid[arrayIndex] === TRACK_PLAYERSTART) {
-          trackGrid[arrayIndex] = 0;
-          this.ang = (-90 * Math.PI) / 180.0;
+    for (var eachRow = 0; eachRow < TRACK_ROWS; eachRow++) {
+      for (var eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
+        var arrayIndex = rowColToArrayIndex(eachCol, eachRow);
+        if (trackGrid[arrayIndex] == TRACK_PLAYERSTART) {
+          trackGrid[arrayIndex] = TRACK_ROAD;
+          this.ang = -Math.PI / 2;
           this.x = eachCol * TRACK_W + TRACK_W / 2;
           this.y = eachRow * TRACK_H + TRACK_H / 2;
-        } // end of if this track here
-      } // end of for each track
-    }
+          return;
+        } // end of player start if
+      } // end of col for
+    } // end of row for
   };
 
   carMove = () => {
@@ -63,6 +73,8 @@ export class Car {
     }
     this.x += Math.cos(this.ang) * this.speed;
     this.y += Math.sin(this.ang) * this.speed;
+
+    carTrackHandling(this);
   };
 
   carDraw = () => {

@@ -2,14 +2,10 @@ import { TRACK_ROAD, TRACK_WALL, TRACK_GOAL, TRACK_TREE, TRACK_FLAG } from './Tr
 import { imageLoadingDoneSoStartGame } from './index';
 
 export const carPic = document.createElement('img');
-// export const roadPic = document.createElement('img');
-// export const wallPic = document.createElement('img');
-// export const goalPic = document.createElement('img');
-// export const treePic = document.createElement('img');
-// export const flagPic = document.createElement('img');
 
 let picsToLoad = 0; // set automatically based on imageList in loadImages
 export const trackPics: HTMLImageElement[] = [];
+trackPics[2] = carPic;
 
 export const countLoadedImagesAndLaunchIfReady = () => {
   picsToLoad--;
@@ -46,7 +42,7 @@ export const loadImages = () => {
 
   picsToLoad = imageList.length;
 
-  for (let i = 0, length = imageList.length; i < length; i++) {
+  for (var i = 0; i < imageList.length; i++) {
     if (imageList[i].varName != undefined) {
       beginLoadingImage(imageList[i].varName, imageList[i].theFile);
     } else {

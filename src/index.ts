@@ -10,7 +10,8 @@ export type CanvasContext = CanvasRenderingContext2D | null;
 export let canvas: Canvas = null;
 export let canvasContext: CanvasContext = null;
 
-export const blueCar = new Car();
+const blueCar = new Car();
+const greenCar = new Car();
 
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -29,19 +30,21 @@ export const imageLoadingDoneSoStartGame = () => {
   setupInput();
 
   blueCar.carReset();
+  greenCar.carReset();
 };
 
 const updateAll = () => {
-  moveAll(blueCar);
+  moveAll();
   drawAll();
 };
 
-const moveAll = (car: Car) => {
-  car.carMove();
-  carTrackHandling(blueCar);
+const moveAll = () => {
+  blueCar.carMove();
+  greenCar.carMove();
 };
 
 const drawAll = () => {
   drawTracks();
   blueCar.carDraw();
+  greenCar.carDraw();
 };

@@ -58,14 +58,20 @@ export const rowColToArrayIndex = (col: number, row: number) => {
 };
 
 export const drawTracks = () => {
+  let arrayIndex = 0;
+  let drawTileX = 0;
+  let drawTileY = 0;
+
   for (let eachRow = 0; eachRow < TRACK_ROWS; eachRow++) {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
-      const arrayIndex = rowColToArrayIndex(eachCol, eachRow);
       const tileKindHere = trackGrid[arrayIndex];
-
       const useImg = trackPics[tileKindHere];
+      canvasContext.drawImage(useImg, drawTileX, drawTileY);
 
-      canvasContext.drawImage(useImg, TRACK_W * eachCol, TRACK_H * eachRow);
-    } // end of for each track
+      drawTileX += TRACK_W;
+      arrayIndex++;
+    }
+    drawTileX = 0;
+    drawTileY += TRACK_H;
   }
-}; // end of drawTracks func
+};

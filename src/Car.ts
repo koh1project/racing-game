@@ -1,5 +1,4 @@
 import { drawBitmapCenteredWithRotation } from './GraphicsCommon';
-import { keyHeld_Gas, keyHeld_Reverse, keyHeld_TurnLeft, keyHeld_TurnRight } from './Input';
 import {
   rowColToArrayIndex,
   trackGrid,
@@ -11,7 +10,6 @@ import {
   carTrackHandling,
   TRACK_ROAD,
 } from './Track';
-import { carPic } from './ImageLoading';
 
 const GROUNDSPEED_DECAY_MULT = 0.94;
 const DRIVE_POWER = 0.5;
@@ -26,11 +24,35 @@ export class Car {
   public ang: number;
   public myCarPic: HTMLImageElement;
 
+  keyHeld_Gas: boolean;
+  keyHeld_Reverse: boolean;
+  keyHeld_TurnLeft: boolean;
+  keyHeld_TurnRight: boolean;
+
+  controlKeyUp: number;
+  controlKeyRight: number;
+  controlKeyDown: number;
+  controlKeyLeft: number;
+
   constructor() {
     this.x = 75;
     this.y = 75;
     this.speed = 0;
     this.ang = 0;
+
+    this.keyHeld_Gas = false;
+    this.keyHeld_Reverse = false;
+    this.keyHeld_TurnLeft = false;
+    this.keyHeld_TurnRight = false;
+
+  
+  }
+
+  setUpInput = (upKey:number, rightKey: number, downKey: number, leftKey: number) => {
+    this.controlKeyUp = upKey;
+    this.controlKeyRight = rightKey;
+    this.controlKeyDown = downKey;
+    this.controlKeyLeft = leftKey;
   }
 
   changeCarSpeed = () => {
@@ -59,17 +81,17 @@ export class Car {
     this.speed *= GROUNDSPEED_DECAY_MULT;
 
     const SPEED_RANGE = 0.3;
-    if (keyHeld_Gas) {
+    if (this.keyHeld_Gas) {
       this.speed += DRIVE_POWER;
     }
-    if (keyHeld_Reverse) {
+    if (this.keyHeld_Reverse) {
       this.speed = this.speed - REVERSE_POWER <= 0 ? 0 : this.speed - REVERSE_POWER;
     }
     if (Math.abs(this.speed) > MIN_SPEED_TO_TURN) {
-      if (keyHeld_TurnLeft) {
+      if (this.keyHeld_TurnLeft) {
         this.ang -= TURN_RATE;
       }
-      if (keyHeld_TurnRight) {
+      if (this.keyHeld_TurnRight) {
         this.ang += TURN_RATE;
       }
     }

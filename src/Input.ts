@@ -1,14 +1,15 @@
-import { canvas } from './index';
+import { Car } from './Car';
+import { blueCar, canvas, greenCar } from './index';
 
-export const KEY_LEFT_ARROW = 37;
-export const KEY_UP_ARROW = 38;
-export const KEY_RIGHT_ARROW = 39;
-export const KEY_DOWN_ARROW = 40;
+const KEY_LEFT_ARROW = 37;
+const KEY_UP_ARROW = 38;
+const KEY_RIGHT_ARROW = 39;
+const KEY_DOWN_ARROW = 40;
 
-export let keyHeld_Gas = false;
-export let keyHeld_Reverse = false;
-export let keyHeld_TurnLeft = false;
-export let keyHeld_TurnRight = false;
+const KEY_W = 87;
+const KEY_A = 65;
+const KEY_S = 83;
+const KEY_D = 68;
 
 export let mouseX = 0;
 export let mouseY = 0;
@@ -18,6 +19,9 @@ export const setupInput = () => {
 
   document.addEventListener('keydown', keyPressed);
   document.addEventListener('keyup', keyReleased);
+
+  greenCar.setUpInput(KEY_W, KEY_D, KEY_S, KEY_A);
+  blueCar.setUpInput(KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW);
 };
 
 export const updateMousePos = (evt: MouseEvent) => {
@@ -28,42 +32,33 @@ export const updateMousePos = (evt: MouseEvent) => {
   mouseY = evt.clientY - rect.top - root.scrollTop;
 };
 
-export const keyPressed = (evt: KeyboardEvent) => {
+export const keySet = (evt: KeyboardEvent, car: Car, setTo: boolean) => {
+  console.log('evt: ', evt.keyCode);
   switch (evt.keyCode) {
-    case KEY_LEFT_ARROW:
-      keyHeld_TurnLeft = true;
+    case car.controlKeyLeft:
+      car.keyHeld_TurnLeft = setTo;
       break;
-    case KEY_RIGHT_ARROW:
-      keyHeld_TurnRight = true;
+    case car.controlKeyRight:
+      car.keyHeld_TurnRight = setTo;
       break;
-    case KEY_UP_ARROW:
-      keyHeld_Gas = true;
+    case car.controlKeyUp:
+      car.keyHeld_Gas = setTo;
       break;
-    case KEY_DOWN_ARROW:
-      keyHeld_Reverse = true;
+    case car.controlKeyDown:
+      car.keyHeld_Reverse = setTo;
       break;
     default:
       break;
   }
+};
 
+export const keyPressed = (evt: KeyboardEvent) => {
+  keySet(evt, blueCar, true);
+  keySet(evt, greenCar, true);
   evt.preventDefault();
 };
 
 export const keyReleased = (evt: KeyboardEvent) => {
-  switch (evt.keyCode) {
-    case KEY_LEFT_ARROW:
-      keyHeld_TurnLeft = false;
-      break;
-    case KEY_RIGHT_ARROW:
-      keyHeld_TurnRight = false;
-      break;
-    case KEY_UP_ARROW:
-      keyHeld_Gas = false;
-      break;
-    case KEY_DOWN_ARROW:
-      keyHeld_Reverse = false;
-      break;
-    default:
-      break;
-  }
+  keySet(evt, greenCar, false);
+  keySet(evt, blueCar, false);
 };

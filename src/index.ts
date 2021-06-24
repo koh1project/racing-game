@@ -1,6 +1,6 @@
 import { Car } from './Car';
 import { setupInput } from './Input';
-import { carTrackHandling, drawTracks } from './Track';
+import { drawTracks } from './Track';
 import { carPic, loadImages, otherCarPic } from './ImageLoading';
 import { colorRect, colorText } from './GraphicsCommon';
 
@@ -10,8 +10,8 @@ export type CanvasContext = CanvasRenderingContext2D | null;
 export let canvas: Canvas = null;
 export let canvasContext: CanvasContext = null;
 
-const blueCar = new Car();
-const greenCar = new Car();
+export const blueCar = new Car();
+export const greenCar = new Car();
 
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;

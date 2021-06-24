@@ -1,7 +1,7 @@
 import { Car } from './Car';
 import { setupInput } from './Input';
 import { carTrackHandling, drawTracks } from './Track';
-import { loadImages } from './ImageLoading';
+import { carPic, loadImages, otherCarPic } from './ImageLoading';
 import { colorRect, colorText } from './GraphicsCommon';
 
 export type Canvas = HTMLCanvasElement | null;
@@ -29,8 +29,8 @@ export const imageLoadingDoneSoStartGame = () => {
 
   setupInput();
 
-  blueCar.carReset();
-  greenCar.carReset();
+  blueCar.carReset(carPic);
+  greenCar.carReset(otherCarPic);
 };
 
 const updateAll = () => {

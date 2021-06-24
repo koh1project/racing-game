@@ -24,6 +24,7 @@ export class Car {
   public y: number;
   public speed: number;
   public ang: number;
+  public myCarPic: HTMLImageElement;
 
   constructor() {
     this.x = 75;
@@ -38,7 +39,8 @@ export class Car {
     this.speed *= -0.5;
   };
 
-  carReset = () => {
+  carReset = (image: HTMLImageElement) => {
+    this.myCarPic = image;
     for (var eachRow = 0; eachRow < TRACK_ROWS; eachRow++) {
       for (var eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
         var arrayIndex = rowColToArrayIndex(eachCol, eachRow);
@@ -78,7 +80,7 @@ export class Car {
   };
 
   carDraw = () => {
-    drawBitmapCenteredWithRotation(carPic, this.x, this.y, this.ang);
+    drawBitmapCenteredWithRotation(this.myCarPic, this.x, this.y, this.ang);
   };
 
   getX = () => {

@@ -2,6 +2,7 @@ import { TRACK_ROAD, TRACK_WALL, TRACK_GOAL, TRACK_TREE, TRACK_FLAG } from './Tr
 import { imageLoadingDoneSoStartGame } from './index';
 
 export const carPic = document.createElement('img');
+export const otherCarPic = document.createElement('img');
 
 let picsToLoad = 0; // set automatically based on imageList in loadImages
 export const trackPics: HTMLImageElement[] = [];
@@ -33,6 +34,7 @@ const loadImageForTrackCode = (trackCode: number, fileName: string) => {
 export const loadImages = () => {
   const imageList: ImageListItem[] = [
     { varName: carPic, theFile: 'player1car.png' },
+    { varName: otherCarPic, theFile: 'player2car.png' },
     { trackType: TRACK_ROAD, theFile: 'track_road.png' },
     { trackType: TRACK_WALL, theFile: 'track_wall.png' },
     { trackType: TRACK_GOAL, theFile: 'track_goal.png' },

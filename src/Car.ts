@@ -18,11 +18,12 @@ const TURN_RATE = 0.06;
 const MIN_SPEED_TO_TURN = 0.5;
 
 export class Car {
-  public x: number;
-  public y: number;
-  public speed: number;
-  public ang: number;
-  public myCarPic: HTMLImageElement;
+  private x: number;
+  private y: number;
+  private speed: number;
+  private ang: number;
+  private myCarPic: HTMLImageElement;
+  private name;
 
   keyHeld_Gas: boolean;
   keyHeld_Reverse: boolean;
@@ -45,15 +46,15 @@ export class Car {
     this.keyHeld_TurnLeft = false;
     this.keyHeld_TurnRight = false;
 
-  
+    this.name = 'Untitled Car';
   }
 
-  setUpInput = (upKey:number, rightKey: number, downKey: number, leftKey: number) => {
+  setUpInput = (upKey: number, rightKey: number, downKey: number, leftKey: number) => {
     this.controlKeyUp = upKey;
     this.controlKeyRight = rightKey;
     this.controlKeyDown = downKey;
     this.controlKeyLeft = leftKey;
-  }
+  };
 
   changeCarSpeed = () => {
     this.x -= Math.cos(this.ang) * this.speed;
@@ -61,7 +62,8 @@ export class Car {
     this.speed *= -0.5;
   };
 
-  carReset = (image: HTMLImageElement) => {
+  carReset = (image: HTMLImageElement, carName: string) => {
+    this.name = carName;
     this.myCarPic = image;
     for (var eachRow = 0; eachRow < TRACK_ROWS; eachRow++) {
       for (var eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
@@ -116,5 +118,8 @@ export class Car {
   };
   getSpeed = () => {
     return this.speed;
+  };
+  getName = () => {
+    return this.name;
   };
 }

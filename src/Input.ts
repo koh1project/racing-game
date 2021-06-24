@@ -33,7 +33,6 @@ export const updateMousePos = (evt: MouseEvent) => {
 };
 
 export const keySet = (evt: KeyboardEvent, car: Car, setTo: boolean) => {
-  console.log('evt: ', evt.keyCode);
   switch (evt.keyCode) {
     case car.controlKeyLeft:
       car.keyHeld_TurnLeft = setTo;

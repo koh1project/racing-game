@@ -1,6 +1,6 @@
 import { Car } from './Car';
 import { setupInput } from './Input';
-import { drawTracks } from './Track';
+import { drawTracks, levelOne, changeTrackGrid } from './Track';
 import { carPic, loadImages, otherCarPic } from './ImageLoading';
 import { colorRect, colorText } from './GraphicsCommon';
 
@@ -29,8 +29,7 @@ export const imageLoadingDoneSoStartGame = () => {
 
   setupInput();
 
-  blueCar.carReset(carPic);
-  greenCar.carReset(otherCarPic);
+  loadLevel(levelOne);
 };
 
 const updateAll = () => {
@@ -47,4 +46,10 @@ const drawAll = () => {
   drawTracks();
   blueCar.carDraw();
   greenCar.carDraw();
+};
+
+const loadLevel = (whichLevel) => {
+  changeTrackGrid(whichLevel);
+  greenCar.carReset(otherCarPic, 'Green Machine');
+  blueCar.carReset(carPic, 'Blue Storm');
 };

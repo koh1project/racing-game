@@ -11,7 +11,7 @@ export const TRACK_COLS = 20;
 export const TRACK_ROWS = 15;
 
 export // prettier-ignore
-let trackGrid = [ 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4,
+const levelOne = [ 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4,
                   4, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                   4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                   1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
@@ -19,13 +19,15 @@ let trackGrid = [ 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4,
                   1, 0, 0, 1, 1, 0, 0, 1, 4, 4, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1,
                   1, 0, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1,
                   1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 5, 0, 0, 1, 0, 0, 1,
-                  1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+                  1, 3, 3, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
                   1, 0, 0, 1, 0, 0, 5, 0, 0, 0, 5, 0, 0, 1, 0, 0, 1, 0, 0, 1,
                   1, 2, 2, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0, 0, 1,
                   1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
                   0, 3, 0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
                   0, 3, 0, 0, 0, 0, 1, 4, 4, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1,
                   1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 4];
+
+export let trackGrid: number[] = [];
 
 export const TRACK_ROAD = 0;
 export const TRACK_WALL = 1;
@@ -34,12 +36,16 @@ export const TRACK_GOAL = 3;
 export const TRACK_TREE = 4;
 export const TRACK_FLAG = 5;
 
-export const isObstacleAtColRow = (col: number, row: number): boolean => {
+export const changeTrackGrid = (grid) => {
+  trackGrid = grid.slice();
+};
+
+export const returnTileTypeAtColRow = (col: number, row: number) => {
   if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
     let trackIndexUnderCoord = rowColToArrayIndex(col, row);
-    return trackGrid[trackIndexUnderCoord] != TRACK_ROAD;
+    return trackGrid[trackIndexUnderCoord];
   } else {
-    return false;
+    return TRACK_WALL;
   }
 };
 
@@ -48,7 +54,13 @@ export const carTrackHandling = (car: Car) => {
   let carTrackRow = Math.floor(car.getY() / TRACK_H);
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
-    if (isObstacleAtColRow(carTrackCol, carTrackRow)) {
+    const tileHere = returnTileTypeAtColRow(carTrackCol, carTrackRow);
+
+    if (tileHere === TRACK_GOAL) {
+      console.log(car.getName());
+    }
+
+    if (tileHere != TRACK_ROAD) {
       car.changeCarSpeed();
     } // end of track found
   } // end of valid col and row

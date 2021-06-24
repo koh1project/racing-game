@@ -1,5 +1,9 @@
+const roadPic = document.createElement('img');
+const wallPic = document.createElement('img');
+
 import { carX, carY, changeCarSpeed } from './Car';
 import { colorRect } from './GraphicsCommon';
+import { canvasContext } from './index';
 
 export const TRACK_W = 40;
 export const TRACK_H = 40;
@@ -28,7 +32,12 @@ export const TRACK_ROAD = 0;
 export const TRACK_WALL = 1;
 export const TRACK_PLAYERSTART = 2;
 
-export const isWallAtColRow = (col: number, row: number) => {
+export const trackLoadImages = (): void => {
+  roadPic.src = './images/track_road.png';
+  wallPic.src = './images/track_wall.png';
+};
+
+export const isWallAtColRow = (col: number, row: number): boolean => {
   if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
     let trackIndexUnderCoord = rowColToArrayIndex(col, row);
     return trackGrid[trackIndexUnderCoord] === TRACK_WALL;
@@ -57,9 +66,13 @@ export const drawTracks = () => {
     for (let eachCol = 0; eachCol < TRACK_COLS; eachCol++) {
       let arrayIndex = rowColToArrayIndex(eachCol, eachRow);
 
-      if (trackGrid[arrayIndex] === TRACK_WALL) {
-        colorRect(TRACK_W * eachCol, TRACK_H * eachRow, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
-      } // end of if this track here
+      if (trackGrid[arrayIndex] === TRACK_ROAD) {
+        canvasContext.drawImage(roadPic, TRACK_W * eachCol, TRACK_H * eachRow);
+
+        // colorRect(TRACK_W * eachCol, TRACK_H * eachRow, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
+      } else if (trackGrid[arrayIndex] === TRACK_WALL) {
+        canvasContext.drawImage(wallPic, TRACK_W * eachCol, TRACK_H * eachRow);
+      }
     } // end of for each track
   }
 }; // end of drawTracks func

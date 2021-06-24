@@ -1,7 +1,8 @@
-import { carX, carY, changeCarSpeed } from './Car';
-import { colorRect } from './GraphicsCommon';
+// import {  } from './Car';
+
 import { canvasContext } from './index';
 import { trackPics } from './ImageLoading';
+import { Car } from './Car';
 
 export const TRACK_W = 40;
 export const TRACK_H = 40;
@@ -42,13 +43,13 @@ export const isObstacleAtColRow = (col: number, row: number): boolean => {
   }
 };
 
-export const carTrackHandling = () => {
-  let carTrackCol = Math.floor(carX / TRACK_W);
-  let carTrackRow = Math.floor(carY / TRACK_H);
+export const carTrackHandling = (car: Car) => {
+  let carTrackCol = Math.floor(car.getX() / TRACK_W);
+  let carTrackRow = Math.floor(car.getY() / TRACK_H);
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS && carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
     if (isObstacleAtColRow(carTrackCol, carTrackRow)) {
-      changeCarSpeed();
+      car.changeCarSpeed();
     } // end of track found
   } // end of valid col and row
 }; // end of carTrackHandling function

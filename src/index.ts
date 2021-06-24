@@ -1,4 +1,4 @@
-import { carReset, carMove, carDraw } from './Car';
+import { Car } from './Car';
 import { setupInput } from './Input';
 import { carTrackHandling, drawTracks } from './Track';
 import { loadImages } from './ImageLoading';
@@ -9,6 +9,8 @@ export type CanvasContext = CanvasRenderingContext2D | null;
 
 export let canvas: Canvas = null;
 export let canvasContext: CanvasContext = null;
+
+export const blueCar = new Car();
 
 window.onload = () => {
   canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -26,20 +28,20 @@ export const imageLoadingDoneSoStartGame = () => {
 
   setupInput();
 
-  carReset();
+  blueCar.carReset();
 };
 
 const updateAll = () => {
-  moveAll();
+  moveAll(blueCar);
   drawAll();
 };
 
-const moveAll = () => {
-  carMove();
-  carTrackHandling();
+const moveAll = (car: Car) => {
+  car.carMove();
+  carTrackHandling(blueCar);
 };
 
 const drawAll = () => {
   drawTracks();
-  carDraw();
+  blueCar.carDraw();
 };
